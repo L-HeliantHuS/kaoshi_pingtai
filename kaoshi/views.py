@@ -298,7 +298,7 @@ def random_judge(request):
         last = int(time.time())
         request.session["last_time"] = last
         count = Judge.objects.all().count()
-        rand_ids = random.sample(range(0, count), 15)
+        rand_ids = random.sample(range(1, count), 15)
         db = Judge.objects.filter(id__in=rand_ids)
         return render(request, "random_judge.html", {"data": db})
 
