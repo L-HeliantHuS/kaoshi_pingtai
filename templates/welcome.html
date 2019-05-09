@@ -6,7 +6,7 @@
 {% block body %}
 
     <div class="container">
-        <div class="alert alert-info">欢迎来BiliBili看我！ <a href="https://space.bilibili.com/178530124">https://space.bilibili.com/178530124</a> </div>
+        <div class="alert alert-info">欢迎来BiliBili看我！ <a href="https://space.bilibili.com/178530124" target="_blank">https://space.bilibili.com/178530124</a> </div>
         <h1 class="text-center">欢迎复习. <label for="" class="text-danger">乾坤未定, 你我皆黑马.</label></h1>
         <br>
 
@@ -31,15 +31,15 @@
         </label>
         <hr>
         <label for="">
-            <a href="{% url 'random_select' %}">随机单选题(50)</a>
+            <a href="{% url 'random_select' %}">随机单选题(30)</a> (每次get请求都会改变题目, 提交了就不要返回了.)
         </label>
         <br>
         <label for="">
-            <a href="{% url 'random_selects' %}">随机多选题(15)</a>
+            <a href="{% url 'random_selects' %}">随机多选题(15)</a> (同上)
         </label>
         <br>
         <label for="">
-            <a href="{% url 'random_judge' %}">随机判断题(15)</a>
+            <a href="{% url 'random_judge' %}">随机判断题(15)</a> (同上)
         </label>
         
     </div>

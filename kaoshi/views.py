@@ -98,7 +98,7 @@ def random_select(request):
         last = int(time.time())
         request.session["last_time"] = last
         count = Select.objects.all().count()
-        rand_ids = random.sample(range(1, count), 50)
+        rand_ids = random.sample(range(1, count), 30)
         db = Select.objects.filter(id__in=rand_ids)
         return render(request, "random_select.html", {"data": db})
 
