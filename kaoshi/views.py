@@ -11,7 +11,7 @@ def index(request):
     train_time = request.COOKIES.get("t")
     if train_time is None:
         response = render(request, "welcome.html")
-        response.set_cookie('t', 0)
+        response.set_cookie('t', 0, max_age=99999, path="/")
 
     else:
         total = int(request.COOKIES.get("t")) / 60
@@ -54,13 +54,14 @@ def select(request):
                 true_total += 1
             else:
                 pass_total += 1
-                pass_value.append(value)
+                pass_value.insert(0, value)
                 pass_key.append(key)
                 pass_index.append(indexkey)  # 错误的索引
 
         error_topic = db.filter(id__in=pass_key)
-        pass_value.sort(reverse=True)
         pass_index.sort(reverse=True)
+        print(pass_index)
+        print(pass_value)
 
         # 提交题目, 获取当前的时间戳，并获取之前看到题目的时间戳, 进行减法运算, 得到时间.
         end_time = int(time.time())
@@ -145,7 +146,7 @@ def selects(request):
             else:
                 pass_total += 1
                 pass_key.append(i)
-                pass_value.append(temp[str(i)])
+                pass_value.insert(0, temp[str(i)])
                 pass_index.insert(0, j)
 
         # 错误页面题号排序
@@ -153,7 +154,6 @@ def selects(request):
         int_temp_index.sort(reverse=True)
 
         error_topic = db.filter(id__in=pass_key)
-        pass_value.sort()
 
         end_time = int(time.time())
         train_time = end_time - request.session["last_time"]
@@ -222,6 +222,7 @@ def judge(request):
         keys_true = {str(i.id):i.key for i in db.all()}  # 正确答案
 
         temp = ""  # 用来检测一道题目是否选择了多个选项
+        replace_temp = {"1": "对", "0": "错"}
         for i in keys:
             key, value, indexkey = i.split("|")
             if key == temp:
@@ -232,13 +233,11 @@ def judge(request):
             else:
                 pass_total += 1
                 pass_key.append(key)
-                pass_value.append(True if value == "1" else False)
+                pass_value.insert(0, replace_temp[value])
                 pass_index.append(indexkey)
 
         error_topic = db.filter(id__in=pass_key)
-        pass_value = pass_value[::-1]
-        replace_temp = {"True": "对", "False": "错"}
-        pass_value = [replace_temp[str(i)] for i in pass_value]
+
         pass_index.sort(reverse=True)
 
         # 错误页面题号排序
@@ -259,7 +258,7 @@ def judge(request):
                                                   "true_key": pass_value,
                                                   "bfb": "%.2f" % (int(true_total) / int(true_total + pass_total) * 100),
                                                   "time": train_time,
-                                                      "pass_index": int_temp_index
+                                                  "pass_index": int_temp_index
                                                   })
         if request.COOKIES.get("t"):
             temp_time = int(request.COOKIES.get("t")) if int(request.COOKIES.get("t")) else 0
@@ -278,6 +277,6 @@ def random_judge(request):
         last = int(time.time())
         request.session["last_time"] = last
         count = Judge.objects.all().count()
-        rand_ids = random.sample(range(1, count), 15)
+        rand_ids = random.sample(range(0, count), 15)
         db = Judge.objects.filter(id__in=rand_ids)
         return render(request, "random_judge.html", {"data": db})
