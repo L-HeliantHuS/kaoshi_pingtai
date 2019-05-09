@@ -1,23 +1,39 @@
 from django.shortcuts import render, HttpResponse
-from kaoshi.models import Select, Selects, Judge
+from kaoshi.models import Select, Selects, Judge, Bugs
 import operator
 import time
 import random
+import psutil
+
 
 # Create your views here.
 
 
 def index(request):
     train_time = request.COOKIES.get("t")
+    memory = getMemorystate()
     if train_time is None:
         response = render(request, "welcome.html")
         response.set_cookie('t', 0, max_age=99999, path="/")
-
+        total = 0
     else:
         total = int(request.COOKIES.get("t")) / 60
-        response = render(request, "welcome.html", {"total": "%.2f" % total})
-
+    response = render(request, "welcome.html", {"total": "%.2f" % total, "memory": memory})
     return response
+
+
+def getCPUstate(interval=1):
+    return (" CPU: " + str(psutil.cpu_percent(interval)) + "%")
+
+
+def getMemorystate():
+    phymem = psutil.virtual_memory()
+    line = "Memory: %5s%% %6s/%s" % (
+        phymem.percent,
+        str(int(phymem.used / 1024 / 1024)) + "M",
+        str(int(phymem.total / 1024 / 1024)) + "M"
+    )
+    return line
 
 
 def select(request):
@@ -35,7 +51,7 @@ def select(request):
 
     elif request.method == "POST":
         keys = request.POST.getlist("select")
-        if keys == []:
+        if not keys:
             return HttpResponse("你倒是选择啊.")
         db = Select.objects
         true_total = 0  # 做对的题目数量
@@ -43,7 +59,7 @@ def select(request):
         pass_key = []  # 做错的题号
         pass_value = []  # 做错的答案
         pass_index = []  # 错误索引
-        keys_true = {str(i.id):i.key for i in db.all()}  # 正确答案
+        keys_true = {str(i.id): i.key for i in db.all()}  # 正确答案
         temp = ""
         for i in keys:
             key, value, indexkey = i.split("|")
@@ -56,12 +72,10 @@ def select(request):
                 pass_total += 1
                 pass_value.insert(0, value)
                 pass_key.append(key)
-                pass_index.append(indexkey)  # 错误的索引
+                pass_index.append(int(indexkey))  # 错误的索引
 
         error_topic = db.filter(id__in=pass_key)
         pass_index.sort(reverse=True)
-        print(pass_index)
-        print(pass_value)
 
         # 提交题目, 获取当前的时间戳，并获取之前看到题目的时间戳, 进行减法运算, 得到时间.
         end_time = int(time.time())
@@ -71,17 +85,18 @@ def select(request):
         # return HttpResponse(11)
         # count: 一共做了多少题目
         response = render(request, "error_pic.html", {"count": true_total + pass_total,
-                                                  "true_total": true_total,
-                                                  "pass_total": pass_total,
-                                                  "pass_key": pass_key,
-                                                  "error_topic": error_topic,
-                                                  "total": db.count(),
-                                                  "true_key": pass_value,
-                                                  "bfb": "%.2f" % (int(true_total) / int(true_total + pass_total) * 100),
-                                                  "dual": True,
-                                                  "time": train_time,
-                                                  "pass_index": pass_index,
-                                                  })
+                                                      "true_total": true_total,
+                                                      "pass_total": pass_total,
+                                                      "pass_key": pass_key,
+                                                      "error_topic": error_topic,
+                                                      "total": db.count(),
+                                                      "true_key": pass_value,
+                                                      "bfb": "%.2f" % (
+                                                              int(true_total) / int(true_total + pass_total) * 100),
+                                                      "dual": True,
+                                                      "time": train_time,
+                                                      "pass_index": pass_index,
+                                                      })
 
         if request.COOKIES.get("t"):
             temp_time = int(request.COOKIES.get("t")) if int(request.COOKIES.get("t")) else 0
@@ -93,6 +108,7 @@ def select(request):
     else:
         return HttpResponse("No")
 
+
 def random_select(request):
     if request.method == "GET":
         # 访问题目的时候创建一个session 保存当前的时间戳
@@ -102,6 +118,7 @@ def random_select(request):
         rand_ids = random.sample(range(1, count), 30)
         db = Select.objects.filter(id__in=rand_ids)
         return render(request, "random_select.html", {"data": db})
+
 
 def selects(request):
     """
@@ -116,7 +133,7 @@ def selects(request):
         return render(request, "selects.html", {"data": db})
     elif request.method == "POST":
         keys = request.POST.getlist("select")
-        if keys == []:
+        if not keys:
             return HttpResponse("你倒是选择啊.")
         db = Selects.objects
         true_total = 0
@@ -136,8 +153,7 @@ def selects(request):
             temp[key].append(value)
             temp_index.append(indexkey)
 
-        print(temp_index)
-        temp_index = list(set(temp_index))
+        temp_index = [int(i) for i in list(set(temp_index))]
         temp_index.sort()
 
         for i, j in zip(temp, temp_index):
@@ -147,7 +163,7 @@ def selects(request):
                 pass_total += 1
                 pass_key.append(i)
                 pass_value.insert(0, temp[str(i)])
-                pass_index.insert(0, j)
+                pass_index.insert(0, str(j))
 
         # 错误页面题号排序
         int_temp_index = [int(i) for i in pass_index]
@@ -159,20 +175,20 @@ def selects(request):
         train_time = end_time - request.session["last_time"]
         request.session["train_time"] = train_time
 
-
         # count: 一共做了多少题目
-        response = render(request, "error_pic.html", {"count": true_total + pass_total,
-                                                  "true_total": true_total,
-                                                  "pass_total": pass_total,
-                                                  "pass_key": pass_key,
-                                                  "error_topic": error_topic,
-                                                  "total": db.count(),
-                                                  "true_key": ["".join(i) for i in pass_value],
-                                                  "bfb": "%.2f" % (int(true_total) / int(true_total + pass_total) * 100),
-                                                  "dual": True,
-                                                  "time": train_time,
-                                                  "pass_index": int_temp_index,
-                                                  })
+        response = render(request, "error_pic.html", {
+            'count': true_total + pass_total,
+            'true_total': true_total,
+            'pass_total': pass_total,
+            'pass_key': pass_key,
+            'error_topic': error_topic,
+            'total': db.count(),
+            'true_key': ["".join(i) for i in pass_value],
+            'bfb': "%.2f" % (
+                    int(true_total) / int(true_total + pass_total) * 100),
+            'dual': True, 'time': train_time,
+            'pass_index': int_temp_index
+        })
 
         if request.COOKIES.get("t"):
             temp_time = int(request.COOKIES.get("t")) if int(request.COOKIES.get("t")) else 0
@@ -185,6 +201,7 @@ def selects(request):
     else:
         return HttpResponse("No")
 
+
 def random_selects(request):
     if request.method == "GET":
         # 访问题目的时候创建一个session 保存当前的时间戳
@@ -194,6 +211,7 @@ def random_selects(request):
         rand_ids = random.sample(range(1, count), 15)
         db = Selects.objects.filter(id__in=rand_ids)
         return render(request, "random_selects.html", {"data": db})
+
 
 def judge(request):
     """
@@ -211,7 +229,7 @@ def judge(request):
     elif request.method == "POST":
         keys = request.POST.getlist("judge")
         # 判断是否没有做任何题目就点击了提交.
-        if keys == []:
+        if not keys:
             return HttpResponse("你倒是做题啊...")
         db = Judge.objects.all()
         true_total = 0  # 做对的题目数量
@@ -219,7 +237,7 @@ def judge(request):
         pass_key = []  # 做错的题号
         pass_value = []  # 做错的答案
         pass_index = []  # 错误索引
-        keys_true = {str(i.id):i.key for i in db.all()}  # 正确答案
+        keys_true = {str(i.id): i.key for i in db.all()}  # 正确答案
 
         temp = ""  # 用来检测一道题目是否选择了多个选项
         replace_temp = {"1": "对", "0": "错"}
@@ -244,22 +262,24 @@ def judge(request):
         int_temp_index = [int(i) for i in pass_index]
         int_temp_index.sort(reverse=True)
 
-
         end_time = int(time.time())
         train_time = end_time - request.session["last_time"]
         request.session["train_time"] = train_time
 
-        response = render(request, "error_pic.html", {"count": true_total + pass_total,
-                                                  "true_total": true_total,
-                                                  "pass_total": pass_total,
-                                                  "pass_key": pass_key,
-                                                  "error_topic": error_topic,
-                                                  "total": db.count(),
-                                                  "true_key": pass_value,
-                                                  "bfb": "%.2f" % (int(true_total) / int(true_total + pass_total) * 100),
-                                                  "time": train_time,
-                                                  "pass_index": int_temp_index
-                                                  })
+        response = render(request, "error_pic.html", {
+            "count": true_total + pass_total,
+            "true_total": true_total,
+            "pass_total": pass_total,
+            "pass_key": pass_key,
+            "error_topic": error_topic,
+            "total": db.count(),
+            "true_key": pass_value,
+            "bfb": "%.2f" % (
+                    int(true_total) / int(true_total + pass_total) * 100),
+            "time": train_time,
+            "pass_index": int_temp_index
+        })
+
         if request.COOKIES.get("t"):
             temp_time = int(request.COOKIES.get("t")) if int(request.COOKIES.get("t")) else 0
         else:
@@ -271,6 +291,7 @@ def judge(request):
     else:
         return HttpResponse("No")
 
+
 def random_judge(request):
     if request.method == "GET":
         # 访问题目的时候创建一个session 保存当前的时间戳
@@ -280,3 +301,11 @@ def random_judge(request):
         rand_ids = random.sample(range(0, count), 15)
         db = Judge.objects.filter(id__in=rand_ids)
         return render(request, "random_judge.html", {"data": db})
+
+
+def bugs(request):
+    if request.method == "GET":
+        data = Bugs.objects.order_by("-id")
+        return render(request, "bugs.html", {
+            "data": data,
+        })

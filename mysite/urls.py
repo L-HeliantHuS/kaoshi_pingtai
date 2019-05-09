@@ -26,4 +26,5 @@ urlpatterns = [
     path('random_selects/', views.random_selects, name="random_selects"),
     path('judge/', views.judge, name="judge"),
     path('random_judge/', views.random_judge, name="random_judge"),
+    path('bugs/', views.bugs, name="bugs"),
 ]

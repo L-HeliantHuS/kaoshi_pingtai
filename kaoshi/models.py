@@ -32,3 +32,11 @@ class Judge(models.Model):
     id = models.IntegerField(primary_key=True, verbose_name="题号")
     topic = models.TextField(verbose_name="题目")
     key = models.BooleanField(verbose_name="答案")
+
+class Bugs(models.Model):
+
+
+    id = models.IntegerField(auto_created=True, primary_key=True, verbose_name="序号", unique=True)
+    title = models.CharField(max_length=255, verbose_name="标题")
+    date = models.DateTimeField(auto_now_add=True, verbose_name="日期")
+    content = models.TextField(verbose_name="内容")

@@ -9,7 +9,7 @@
 {% block body %}
 
     <div class="container">
-        <div class="alert alert-primary"><strong>随机多选题！</strong>一共20道题目. 加油!  qq: 1984441370</div>
+        <div class="alert alert-dark"><strong>随机多选题！</strong>一共20道题目. 加油! </div>
         <form action="{% url 'selects' %}" method="post">
             {% csrf_token %}
             {% for i in data %}

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}
+
+    更新日志 and Bug修复.
+
+{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        <div class="alert alert-warning"><strong>BUG修复！</strong>每一次解决问题都是学习的过程.</div>
+        {% for i in data %}
+
+            <div class="card">
+                <div class="card-body">
+                    <h5>{{ i.title }}</h5>
+                    <h6>{{ i.date }}</h6>
+                    <p>{{ i.content }}</p>
+                </div>
+            </div>
+            <br>
+
+        {% endfor %}
+    </div>
+    <div style="position: fixed; margin-right: 10px; bottom: 0; right: 0; float: right;">
+        <a href="{% url 'index' %}" class="btn btn-info">返回主页</a>
+    </div>
+
+
+{% endblock %}

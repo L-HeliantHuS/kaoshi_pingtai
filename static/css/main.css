@@ -1,0 +1,7 @@
+.down-right{
+    position: absolute;
+	margin-right: 10px;
+	bottom: 0;
+	right: 0;
+	float: right;
+}

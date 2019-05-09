@@ -6,42 +6,65 @@
 {% block body %}
 
     <div class="container">
-        <div class="alert alert-info">欢迎来BiliBili看我！ <a href="https://space.bilibili.com/178530124" target="_blank">https://space.bilibili.com/178530124</a> </div>
+        <div class="alert alert-info">欢迎来BiliBili看我！ <a href="https://space.bilibili.com/178530124" target="_blank">https://space.bilibili.com/178530124</a>
+        </div>
         <h1 class="text-center">欢迎复习. <label for="" class="text-danger">乾坤未定, 你我皆黑马.</label></h1>
         <br>
 
         <h4 class="text-center"> 你已经累计学习了<label for="" class="text-warning">
-         {% if not total %}
-            0
-        {% else %}
-            {{ total }}
-        {% endif %} </label> 分钟.</h4>
+            {% if not total %}
+                0
+            {% else %}
+                {{ total }}
+            {% endif %} </label> 分钟.</h4>
 
         <br>
-        <label for="">
-            <a href="{% url 'select' %}">单选题(140)</a>
-        </label>
-        <br>
-        <label for="">
-            <a href="{% url 'selects' %}">多选题(30)</a>
-        </label>
-        <br>
-        <label for="">
-            <a href="{% url 'judge' %}">判断题(30)</a>
-        </label>
+        <div class="row">
+            <div class="col-lg-6 col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        所有题目 (按顺序)
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <a href="{% url 'select' %}">单选题(140)</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="{% url 'selects' %}">多选题(30)</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="{% url 'judge' %}">判断题(30)</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-lg-6 col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        随机题目 (打乱顺序, 量减少)
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <a href="{% url 'random_select' %}">随机单选题(30)</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="{% url 'random_selects' %}">随机多选题(15)</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="{% url 'random_judge' %}">随机判断题(15)</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
         <hr>
-        <label for="">
-            <a href="{% url 'random_select' %}">随机单选题(30)</a> (每次get请求都会改变题目, 提交了就不要返回了.)
-        </label>
-        <br>
-        <label for="">
-            <a href="{% url 'random_selects' %}">随机多选题(15)</a> (同上)
-        </label>
-        <br>
-        <label for="">
-            <a href="{% url 'random_judge' %}">随机判断题(15)</a> (同上)
-        </label>
-        
+
+        <div class="down-right d-none d-xl-block d-lg-block">
+            <p class="">当前服务器状态: {{ cpu }} | {{ memory }} | {{ disk }}</p>
+        </div>
     </div>
+
 
 {% endblock %}

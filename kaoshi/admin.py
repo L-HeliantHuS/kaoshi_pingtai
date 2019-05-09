@@ -1,5 +1,5 @@
 from django.contrib import admin
-from kaoshi.models import Select, Selects, Judge
+from kaoshi.models import Select, Selects, Judge, Bugs
 # Register your models here.
 
 @admin.register(Select)
@@ -13,3 +13,7 @@ class SelectsAdmin(admin.ModelAdmin):
 @admin.register(Judge)
 class JudgeAdmin(admin.ModelAdmin):
     list_display = ["id", "topic", "key"]
+
+@admin.register(Bugs)
+class BugsAdmin(admin.ModelAdmin):
+    list_display = ["id", "title", "date", "content"]
