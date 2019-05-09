@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}
+    判断题~   --HeliantHuS
+{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        <div class="alert alert-dark">
+            <strong>判断题！</strong>你可以判断出来这是对的还是错的么?  qq: 1984441370
+        </div>
+        <form action="{% url 'judge' %}" method="post">
+            {% csrf_token %}
+            {% for i in data %}
+                <strong>{{ forloop.counter }}.</strong> {{ i.topic }} <br>
+                <label for=""><input type="checkbox" name="judge" value="{{ i.id }}|1|{{ forloop.counter }}">对</label> &nbsp;
+                <label for=""><input type="checkbox" name="judge" value="{{ i.id }}|0|{{ forloop.counter }}">错</label> <br>
+                <hr>
+            {% endfor %}
+            <div style="position: fixed; margin-right: 10px; bottom: 0; right: 0; float: right;">
+                <a href="{% url 'index' %}" class="btn btn-info">返回主页</a>
+                <input type="submit" value="提交" class="btn btn-success">
+            </div>
+        </form>
+    </div>
+
+{% endblock %}

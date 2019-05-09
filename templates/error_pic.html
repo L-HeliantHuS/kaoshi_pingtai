@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}
+    查看一下你的错误吧!
+{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        {% if total == true_total %}
+            <div class="alert alert-success">
+                <strong>恭喜！</strong>你的成功率已经达到了100%  考试加油哦！ 顺便发给其他人试试吧.
+            </div>
+            <a href="{% url 'index' %}" class="btn btn-info">返回</a>
+        {% else %}
+            <div class="alert alert-info">
+            共有 <strong>{{ total }}</strong> 个题目, 你做了 <strong>{{ count }}</strong> 个, 做对了 <strong>{{ true_total }}</strong> 个, 做错了 <strong>{{ pass_total }}</strong> 个, 准确率为: <strong>{{ bfb }}%</strong> 花费时间: <strong>{{ time }}</strong> 秒
+        </div>
+        {% endif %}
+
+    {% for i in error_topic %}
+        <strong>{{ pass_index.pop }}.</strong> {{ i.topic }} -----  答案为:
+        <label class="text-success">
+            {% if i.key == True %}
+                对
+            {% elif i.key == False %}
+                错
+            {% else %}
+                {{ i.key }}
+            {% endif %}
+        </label> 你选择的是:
+        {% if dual == True %}
+            <label for="" class="text-danger">
+                {{ true_key.pop|striptags }}
+            </label>
+            <br>
+        {% else %}
+        <label class="text-danger">
+            {{ true_key.pop }}
+        </label>
+        <br>
+
+        {% endif %}
+        <label for="">{{ i.a }}</label> &nbsp;
+        <label for="">{{ i.b }}</label> &nbsp;
+        <label for="">{{ i.c }}</label> &nbsp;
+        <label for="">{{ i.d }}</label> &nbsp;
+        <hr>
+    {% endfor %}
+    <div style="position: fixed; margin-right: 10px; bottom: 0; right: 0; float: right;">
+        <a href="{% url 'index' %}" class="btn btn-info">返回主页</a>
+    </div>
+
+    </div>
+
+{% endblock %}

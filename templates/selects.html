@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    多选题~   --HeliantHuS
+{% endblock %}
+
+
+{% block body %}
+
+    <div class="container">
+        <div class="alert alert-dark">
+            <strong>多选题！</strong>一共30道题目. 加油!  qq: 1984441370
+        </div>
+        <form action="{% url 'selects' %}" method="post">
+            {% csrf_token %}
+        <div class="row">
+            {% for i in data %}
+                <div class="col-xl-8 col-lg-12 col-md-12 col-sm-12">
+                    <strong>{{ i.id }}.</strong> {{ i.topic }} <br>
+                    <label for=""><input type="checkbox" name="select" value="{{ i.id }}|A|{{ forloop.counter }}">{{ i.a }}</label> &nbsp;
+                    <label for=""><input type="checkbox" name="select" value="{{ i.id }}|B|{{ forloop.counter }}">{{ i.b }}</label> <br>
+                    <label for=""><input type="checkbox" name="select" value="{{ i.id }}|C|{{ forloop.counter }}">{{ i.c }}</label> &nbsp;
+                    <label for=""><input type="checkbox" name="select" value="{{ i.id }}|D|{{ forloop.counter }}">{{ i.d }}</label> &nbsp;
+                    <hr>
+                </div>
+            {% endfor %}
+        </div>
+            <div style="position: fixed; margin-right: 10px; bottom: 0; right: 0; float: right;">
+                <a href="{% url 'index' %}" class="btn btn-info">返回主页</a>
+                <input type="submit" value="提交" class="btn btn-success">
+            </div>
+        </form>
+    </div>
+
+
+{% endblock %}

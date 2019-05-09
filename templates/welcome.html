@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}
+    欢迎复习~~
+{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        <div class="alert alert-info">欢迎来BiliBili看我！ <a href="https://space.bilibili.com/178530124">https://space.bilibili.com/178530124</a> </div>
+        <h1 class="text-center">欢迎复习. <label for="" class="text-danger">乾坤未定, 你我皆黑马.</label></h1>
+        <br>
+
+        <h4 class="text-center"> 你已经累计学习了<label for="" class="text-warning">
+         {% if not total %}
+            0
+        {% else %}
+            {{ total }}
+        {% endif %} </label> 分钟.</h4>
+
+        <br>
+        <label for="">
+            <a href="{% url 'select' %}">单选题(140)</a>
+        </label>
+        <br>
+        <label for="">
+            <a href="{% url 'selects' %}">多选题(30)</a>
+        </label>
+        <br>
+        <label for="">
+            <a href="{% url 'judge' %}">判断题(30)</a>
+        </label>
+        <hr>
+        <label for="">
+            <a href="{% url 'random_select' %}">随机单选题(50)</a>
+        </label>
+        <br>
+        <label for="">
+            <a href="{% url 'random_selects' %}">随机多选题(15)</a>
+        </label>
+        <br>
+        <label for="">
+            <a href="{% url 'random_judge' %}">随机判断题(15)</a>
+        </label>
+        
+    </div>
+
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}
+
+    多选随机题目(15道题目)
+
+{% endblock %}
+
+
+{% block body %}
+
+    <div class="container">
+        <div class="alert alert-primary"><strong>随机多选题！</strong>一共20道题目. 加油!  qq: 1984441370</div>
+        <form action="{% url 'select' %}" method="post">
+            {% csrf_token %}
+            {% for i in data %}
+                <strong>{{ forloop.counter }}.</strong> {{ i.topic }} <br>
+                <label for=""><input type="checkbox" name="select" value="{{ i.id }}|A|{{ forloop.counter }}">{{ i.a }}</label> &nbsp;
+                <label for=""><input type="checkbox" name="select" value="{{ i.id }}|B|{{ forloop.counter }}">{{ i.b }}</label> <br>
+                <label for=""><input type="checkbox" name="select" value="{{ i.id }}|C|{{ forloop.counter }}">{{ i.c }}</label> &nbsp;
+                <label for=""><input type="checkbox" name="select" value="{{ i.id }}|D|{{ forloop.counter }}">{{ i.d }}</label> &nbsp;
+                <hr>
+            {% endfor %}
+            <div style="position: fixed; margin-right: 10px; bottom: 0; right: 0; float: right;">
+                <a href="{% url 'index' %}" class="btn btn-info">返回主页</a>
+                <input type="submit" value="提  交" class="btn btn-success">
+            </div>
+
+        </form>
+    </div>
+
+{% endblock %}
