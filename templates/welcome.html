@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block title %}
-    欢迎复习~~
+    欢迎复习!~
 {% endblock %}
 
 {% block body %}
@@ -15,7 +15,11 @@
         <h4 class="text-center">Hello, <strong class="text-info">{{ user }}</strong>.
             你已经累计学习了<strong class="text-warning"> {% widthratio user.userinfo.fraction 60 1 %} </strong> 分钟.
             累计做题 <strong class="text-warning">{{ user.userinfo.total }}</strong> 道, 对 <strong class="text-warning">{{ user.userinfo.ttotal }}</strong> 道, 错 <strong class="text-warning">{{ user.userinfo.ftotal }}</strong> 道, 准确率为 <strong class="text-warning">{% widthratio user.userinfo.ttotal user.userinfo.total 100  %}%</strong> .
-            <a href="{% url 'logout' %}" class="btn btn-dark">注销</a></h4>
+            <a href="{% url 'logout' %}" class="btn btn-dark">注销</a>
+            {% if user.is_staff or user.is_superuser %}
+                <a href="{% url 'admin:index' %}" class="btn btn-info">管理页面</a>
+            {% endif %}
+        </h4>
 
         <br>
         <div class="row">

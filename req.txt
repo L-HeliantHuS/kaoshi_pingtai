@@ -1,4 +1,0 @@
-psutil
-django==2.1.7
-pandas
-numpy
