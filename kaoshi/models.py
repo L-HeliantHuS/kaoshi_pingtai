@@ -12,8 +12,9 @@ class Select(models.Model):
     c = models.CharField(max_length=255, name="c", verbose_name="C选项")
     d = models.CharField(max_length=255, name="d", verbose_name="D选项")
     key = models.CharField(max_length=1, verbose_name="答案")
-    def __str__(self):
-        return "单选题"
+
+    class Meta:
+        verbose_name_plural = "单选题"
 
 
 class Selects(models.Model):
@@ -26,8 +27,10 @@ class Selects(models.Model):
     c = models.CharField(max_length=255, name="c", verbose_name="C选项")
     d = models.CharField(max_length=255, name="d", verbose_name="D选项")
     key = models.CharField(max_length=4, verbose_name="答案")
-    def __str__(self):
-        return "多选题"
+
+    class Meta:
+        verbose_name_plural = "多选题"
+
 
 class Judge(models.Model):
 
@@ -35,8 +38,9 @@ class Judge(models.Model):
     id = models.IntegerField(primary_key=True, verbose_name="题号")
     topic = models.TextField(verbose_name="题目")
     key = models.BooleanField(verbose_name="答案")
-    def __str__(self):
-        return "判断题"
+
+    class Meta:
+        verbose_name_plural = "判断题"
 
 
 class Bugs(models.Model):
@@ -46,6 +50,9 @@ class Bugs(models.Model):
     title = models.CharField(max_length=255, verbose_name="标题")
     date = models.DateTimeField(auto_now_add=True, verbose_name="日期")
     content = models.TextField(verbose_name="内容")
+
+    class Meta:
+        verbose_name_plural = "更新日志"
 
 
 class UserInfo(models.Model):
@@ -57,3 +64,5 @@ class UserInfo(models.Model):
     ttotal = models.BigIntegerField(default=0, auto_created=True)  # 对题总数
     ftotal = models.BigIntegerField(default=0, auto_created=True)  # 错题总数
 
+    class Meta:
+        verbose_name_plural = "用户其他信息"
