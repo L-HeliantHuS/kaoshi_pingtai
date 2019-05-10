@@ -6,17 +6,17 @@
 {% block body %}
 
     <div class="container">
-        <div class="alert alert-info">欢迎来BiliBili看我！ <a href="https://space.bilibili.com/178530124" target="_blank">https://space.bilibili.com/178530124</a>
+        <div class="alert alert-info">本系统是由信息工程系17网络学生<strong>李康</strong>制作, 并由指导教师<strong>李国增</strong>指导
         </div>
         <h1 class="text-center">欢迎复习. <label for="" class="text-danger">乾坤未定, 你我皆黑马.</label></h1>
         <br>
 
-        <h4 class="text-center"> 你已经累计学习了<label for="" class="text-warning">
+        <h4 class="text-center">Hello, <label for="" class="text-success">{{ user }}</label>. 你已经累计学习了<label for="" class="text-warning">
             {% if not total %}
                 0
             {% else %}
                 {{ total }}
-            {% endif %} </label> 分钟.</h4>
+            {% endif %} </label> 分钟. <a href="{% url 'logout' %}" class="btn btn-dark">注销</a></h4>
 
         <br>
         <div class="row">

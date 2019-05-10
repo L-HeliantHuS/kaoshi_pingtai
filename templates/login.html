@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}
+    登陆  - 17网络网络管理证书答题平台
+{% endblock %}
+
+{% block body %}
+
+    <style>
+        body {
+            font-family: 'microsoft yahei', Arial, sans-serif;
+        }
+    </style>
+
+    <div class="modal-dialog">
+        <br> <br>
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h1 class="text-primary text-center">网络管理证书答题练习平台</h1>
+            </div>
+
+            <div class="modal-body">
+                <form action="{% url "login" %}" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input name="username" type="text" class="form-control input-lg" placeholder="登录账号">
+                    </div>
+                    <div class="form-group">
+                        <input name="password" type="password" class="form-control input-lg" placeholder="登录密码">
+                    </div>
+                    <div class="form-group">
+                        <button id="btnlogin" type="submit" class="btn btn-primary btn-lg btn-block">点我登录</button>
+                    </div>
+                    <div id="msg" class="text-center">
+
+                        <span style="color:red;font-size:12px;">{{ error }}</span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

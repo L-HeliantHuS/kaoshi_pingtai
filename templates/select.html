@@ -7,7 +7,7 @@
 {% block body %}
 
     <div class="container">
-        <div class="alert alert-primary"><strong>单选题！</strong>每个题目请务必只选择一个, 否则....嘻嘻.., 没必要一次性全部做完, 做多少个就分析多少个的分.  &nbsp; qq: 1984441370 </div>
+        <div class="alert alert-primary"><strong>单选题！</strong>每个题目请务必只选择一个, 否则....嘻嘻.., 没必要一次性全部做完, 做多少个就分析多少个的分.  &nbsp;  </div>
         <form action="{% url 'select' %}" method="post">
             {% csrf_token %}
             {% for i in data %}

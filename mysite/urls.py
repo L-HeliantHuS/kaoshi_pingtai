@@ -27,4 +27,6 @@ urlpatterns = [
     path('judge/', views.judge, name="judge"),
     path('random_judge/', views.random_judge, name="random_judge"),
     path('bugs/', views.bugs, name="bugs"),
+    path('login/', views.login, name="login"),
+    path('logout/', views.logout, name="logout"),
 ]

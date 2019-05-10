@@ -1,5 +1,6 @@
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, HttpResponse, redirect
 from kaoshi.models import Select, Selects, Judge, Bugs
+from django.contrib import auth
 import operator
 import time
 import random
@@ -10,6 +11,8 @@ import psutil
 
 
 def index(request):
+    if not request.user.is_authenticated:
+        return redirect("/login")
     train_time = request.COOKIES.get("t")
     memory = getMemorystate()
     if train_time is None:
@@ -21,6 +24,38 @@ def index(request):
     response = render(request, "welcome.html", {"total": "%.2f" % total, "memory": memory})
     return response
 
+def login(request):
+    """
+    登陆
+    :param request: 必备参数
+    :return: render
+    """
+    if request.method == "GET":
+        return render(request, "login.html", )
+
+    elif request.method == "POST":
+        username = request.POST.get("username", " ")
+        password = request.POST.get("password", " ")
+        user = auth.authenticate(request, username=username, password=password)
+        if user is not None:
+            auth.login(request, user)
+            return redirect("/")
+        else:
+            return render(request, "login.html", {"error": "用户名或者密码不正确."})
+    else:
+        return HttpResponse("你不可以这样做。")
+
+
+def logout(request):
+    """
+    注销
+    :param request:
+    :return:
+    """
+    if not request.user.is_authenticated:
+        return redirect("/login")
+    auth.logout(request)
+    return redirect("/login")
 
 def getCPUstate(interval=1):
     return (" CPU: " + str(psutil.cpu_percent(interval)) + "%")
@@ -43,6 +78,8 @@ def select(request):
     :return: render
     """
     if request.method == "GET":
+        if not request.user.is_authenticated:
+            return redirect("/login")
         # 访问题目的时候创建一个session 保存当前的时间戳
         last = int(time.time())
         request.session["last_time"] = last
@@ -50,6 +87,8 @@ def select(request):
         return render(request, "select.html", {"data": db})
 
     elif request.method == "POST":
+        if not request.user.is_authenticated:
+            return redirect("/login")
         keys = request.POST.getlist("select")
         if not keys:
             return HttpResponse("你倒是选择啊.")
@@ -111,6 +150,8 @@ def select(request):
 
 def random_select(request):
     if request.method == "GET":
+        if not request.user.is_authenticated:
+            return redirect("/login")
         # 访问题目的时候创建一个session 保存当前的时间戳
         last = int(time.time())
         request.session["last_time"] = last
@@ -127,11 +168,15 @@ def selects(request):
     :return: render
     """
     if request.method == "GET":
+        if not request.user.is_authenticated:
+            return redirect("/login")
         last = int(time.time())
         request.session["last_time"] = last
         db = Selects.objects.all()
         return render(request, "selects.html", {"data": db})
     elif request.method == "POST":
+        if not request.user.is_authenticated:
+            return redirect("/login")
         keys = request.POST.getlist("select")
         if not keys:
             return HttpResponse("你倒是选择啊.")
@@ -204,6 +249,8 @@ def selects(request):
 
 def random_selects(request):
     if request.method == "GET":
+        if not request.user.is_authenticated:
+            return redirect("/login")
         # 访问题目的时候创建一个session 保存当前的时间戳
         last = int(time.time())
         request.session["last_time"] = last
@@ -221,12 +268,16 @@ def judge(request):
     """
 
     if request.method == "GET":
+        if not request.user.is_authenticated:
+            return redirect("/login")
         last = int(time.time())
         request.session["last_time"] = last
         data = Judge.objects.all()
         return render(request, "judge.html", {"data": data})
 
     elif request.method == "POST":
+        if not request.user.is_authenticated:
+            return redirect("/login")
         keys = request.POST.getlist("judge")
         # 判断是否没有做任何题目就点击了提交.
         if not keys:
@@ -294,6 +345,8 @@ def judge(request):
 
 def random_judge(request):
     if request.method == "GET":
+        if not request.user.is_authenticated:
+            return redirect("/login")
         # 访问题目的时候创建一个session 保存当前的时间戳
         last = int(time.time())
         request.session["last_time"] = last
