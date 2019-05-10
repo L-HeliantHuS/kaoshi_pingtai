@@ -1,11 +1,12 @@
 from django.shortcuts import render, HttpResponse, redirect
-from kaoshi.models import Select, Selects, Judge, Bugs
+from kaoshi.models import Select, Selects, Judge, Bugs, UserInfo
 from django.contrib import auth
+from django.contrib.auth.models import User
 import operator
 import time
 import random
 import psutil
-
+import pandas
 
 # Create your views here.
 
@@ -13,16 +14,16 @@ import psutil
 def index(request):
     if not request.user.is_authenticated:
         return redirect("/login")
-    train_time = request.COOKIES.get("t")
+    # 第一次进入会初始化一个分数.
+    try:
+        info = UserInfo.objects.create(user_id=request.user.id, fraction=0, total=0, ttotal=0, ftotal=0)
+        info.save()
+    except:
+        pass
     memory = getMemorystate()
-    if train_time is None:
-        response = render(request, "welcome.html")
-        response.set_cookie('t', 0, max_age=99999, path="/")
-        total = 0
-    else:
-        total = int(request.COOKIES.get("t")) / 60
-    response = render(request, "welcome.html", {"total": "%.2f" % total, "memory": memory})
+    response = render(request, "welcome.html", {"memory": memory})
     return response
+
 
 def login(request):
     """
@@ -31,7 +32,10 @@ def login(request):
     :return: render
     """
     if request.method == "GET":
-        return render(request, "login.html", )
+        # 禁止用户登陆之后再次进入登陆页面.
+        if request.user.is_authenticated:
+            return redirect("/")
+        return render(request, "login.html")
 
     elif request.method == "POST":
         username = request.POST.get("username", " ")
@@ -56,6 +60,7 @@ def logout(request):
         return redirect("/login")
     auth.logout(request)
     return redirect("/login")
+
 
 def getCPUstate(interval=1):
     return (" CPU: " + str(psutil.cpu_percent(interval)) + "%")
@@ -118,31 +123,33 @@ def select(request):
 
         # 提交题目, 获取当前的时间戳，并获取之前看到题目的时间戳, 进行减法运算, 得到时间.
         end_time = int(time.time())
+        # 用时. 单位秒
         train_time = end_time - request.session["last_time"]
-        request.session["train_time"] = train_time
 
-        # return HttpResponse(11)
+        # 修改数据库的内容
+        request.user.userinfo.fraction += train_time
+        request.user.userinfo.total += true_total + pass_total
+        request.user.userinfo.ttotal += true_total
+        request.user.userinfo.ftotal += pass_total
+        request.user.userinfo.save()
+
+
         # count: 一共做了多少题目
-        response = render(request, "error_pic.html", {"count": true_total + pass_total,
-                                                      "true_total": true_total,
-                                                      "pass_total": pass_total,
-                                                      "pass_key": pass_key,
-                                                      "error_topic": error_topic,
-                                                      "total": db.count(),
-                                                      "true_key": pass_value,
-                                                      "bfb": "%.2f" % (
-                                                              int(true_total) / int(true_total + pass_total) * 100),
-                                                      "dual": True,
-                                                      "time": train_time,
-                                                      "pass_index": pass_index,
-                                                      })
+        response = render(request, "error_pic.html", {
+            "count": true_total + pass_total,
+            "true_total": true_total,
+            "pass_total": pass_total,
+            "pass_key": pass_key,
+            "error_topic": error_topic,
+            "total": db.count(),
+            "true_key": pass_value,
+            "bfb": "%.2f" % (
+                    int(true_total) / int(true_total + pass_total) * 100),
+            "dual": True,
+            "time": train_time,
+            "pass_index": pass_index,
+        })
 
-        if request.COOKIES.get("t"):
-            temp_time = int(request.COOKIES.get("t")) if int(request.COOKIES.get("t")) else 0
-        else:
-            temp_time = 0
-        temp_time += train_time
-        response.set_cookie('t', temp_time)
         return response
     else:
         return HttpResponse("No")
@@ -218,7 +225,13 @@ def selects(request):
 
         end_time = int(time.time())
         train_time = end_time - request.session["last_time"]
-        request.session["train_time"] = train_time
+
+        # 修改数据库的内容
+        request.user.userinfo.fraction += train_time
+        request.user.userinfo.total += true_total + pass_total
+        request.user.userinfo.ttotal += true_total
+        request.user.userinfo.ftotal += pass_total
+        request.user.userinfo.save()
 
         # count: 一共做了多少题目
         response = render(request, "error_pic.html", {
@@ -235,12 +248,6 @@ def selects(request):
             'pass_index': int_temp_index
         })
 
-        if request.COOKIES.get("t"):
-            temp_time = int(request.COOKIES.get("t")) if int(request.COOKIES.get("t")) else 0
-        else:
-            temp_time = 0
-        temp_time += train_time
-        response.set_cookie('t', temp_time)
         return response
 
     else:
@@ -315,7 +322,14 @@ def judge(request):
 
         end_time = int(time.time())
         train_time = end_time - request.session["last_time"]
-        request.session["train_time"] = train_time
+
+        # 修改数据库的内容
+        request.user.userinfo.fraction += train_time
+        request.user.userinfo.total += true_total + pass_total
+        request.user.userinfo.ttotal += true_total
+        request.user.userinfo.ftotal += pass_total
+        request.user.userinfo.save()
+
 
         response = render(request, "error_pic.html", {
             "count": true_total + pass_total,
@@ -331,12 +345,6 @@ def judge(request):
             "pass_index": int_temp_index
         })
 
-        if request.COOKIES.get("t"):
-            temp_time = int(request.COOKIES.get("t")) if int(request.COOKIES.get("t")) else 0
-        else:
-            temp_time = 0
-        temp_time += train_time
-        response.set_cookie('t', temp_time)
         return response
 
     else:
@@ -362,3 +370,20 @@ def bugs(request):
         return render(request, "bugs.html", {
             "data": data,
         })
+
+def create_user(request):
+    if request.method == "GET":
+        # 判断是否登陆
+        if not request.user.is_authenticated:
+            return redirect("/login")
+        # 判断是否为超级管理员
+        if not request.user.is_superuser:
+            return redirect("/")
+        data = pandas.read_csv("users.csv")
+        for i, j in zip(data["username"], data["password"]):
+            User.objects.create_user(f"{i}", None, f"{j}")
+
+        return HttpResponse(f"创建完毕, 创建了{len(data['username'])}个用户.")
+
+    else:
+        return redirect("/")

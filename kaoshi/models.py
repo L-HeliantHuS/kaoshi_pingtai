@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import User
 # Create your models here.
 
 class Select(models.Model):
@@ -40,3 +40,13 @@ class Bugs(models.Model):
     title = models.CharField(max_length=255, verbose_name="标题")
     date = models.DateTimeField(auto_now_add=True, verbose_name="日期")
     content = models.TextField(verbose_name="内容")
+
+class UserInfo(models.Model):
+
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    fraction = models.BigIntegerField(default=0, auto_created=True)  # 做题时间
+    total = models.BigIntegerField(default=0, auto_created=True)  # 做题总数
+    ttotal = models.BigIntegerField(default=0, auto_created=True)  # 对题总数
+    ftotal = models.BigIntegerField(default=0, auto_created=True)  # 错题总数
+
