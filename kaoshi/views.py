@@ -103,7 +103,7 @@ def select(request):
         for i in keys:
             key, value, indexkey = i.split("|")
             if key == temp:
-                return HttpResponse(f"检测到你第{temp}题选择了多个答案, 这次不分析成绩, 请重新开始.")
+                return HttpResponse(f"检测到你第{indexkey}题选择了多个答案, 这次不分析成绩, 请重新开始.")
             temp = key
             if keys_true[str(key)] == value:
                 true_total += 1
@@ -289,7 +289,7 @@ def judge(request):
         for i in keys:
             key, value, indexkey = i.split("|")
             if key == temp:
-                return HttpResponse(f"检测到你第{temp}题选择了多个答案, 这次不分析成绩, 请重新开始.")
+                return HttpResponse(f"检测到你第{indexkey}题选择了多个答案, 这次不分析成绩, 请重新开始.")
             temp = key
             if str(int(keys_true[str(key)])) == str(value):
                 true_total += 1
