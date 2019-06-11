@@ -373,3 +373,17 @@ def create_user(request):
 
     else:
         return redirect("/")
+                            
+# def insert(request):
+#     data = pd.read_excel("多选题.xlsx")
+#     for strs, A, B, C, D, result in zip(data["题干"], data["选项A"], data["选项B"], data["选项C"], data["选项D"], data["答案"]):
+#         db = Selects()
+#         db.id = db.objects.count() + 1
+#         db.topic = strs
+#         db.a = A
+#         db.b = B
+#         db.c = C
+#         db.d = D
+#         db.key = result
+#         db.save()
+#     return HttpResponse("success")
