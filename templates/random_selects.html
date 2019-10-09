@@ -9,7 +9,7 @@
 {% block body %}
 
     <div class="container">
-        <div class="alert alert-dark"><strong>随机多选题！</strong>一共15道题目. 加油! </div>
+        <div class="alert alert-dark"><strong>随机多选题！</strong>现在你还可以选择出来谁是正确的么? </div>
         <form action="{% url 'selects' %}" method="post">
             {% csrf_token %}
             {% for i in data %}

@@ -9,7 +9,7 @@
 {% block body %}
 
     <div class="container">
-        <div class="alert alert-dark"><strong>随机单选题！</strong>每个题目请务必只选择一个, 否则....嘻嘻.., 没必要一次性全部做完, 做多少个就分析多少个的分.  &nbsp</div>
+        <div class="alert alert-dark"><strong>随机单选题！</strong>现在你还可以选择出来谁是正确的么? &nbsp</div>
         <form action="{% url 'select' %}" method="post">
             {% csrf_token %}
             {% for i in data %}
