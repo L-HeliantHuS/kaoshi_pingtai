@@ -1,13 +1,17 @@
-from django.shortcuts import render, HttpResponse, redirect
-from kaoshi.models import Select, Selects, Judge, Bugs, UserInfo
+import operator
+import random
+import time
+
+import pandas
+import psutil
+from django.conf import settings
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-import operator
-import time
-import random
-import psutil
-import pandas
+from django.shortcuts import render, HttpResponse, redirect
+
+from kaoshi.models import Select, Selects, Judge, Bugs, UserInfo
+
 
 # Create your views here.
 
@@ -128,7 +132,6 @@ def select(request):
         request.user.userinfo.ftotal += pass_total
         request.user.userinfo.save()
 
-
         # count: 一共做了多少题目
         response = render(request, "error_pic.html", {
             "count": true_total + pass_total,
@@ -157,8 +160,11 @@ def random_select(request):
         last = int(time.time())
         request.session["last_time"] = last
         count = Select.objects.all().count()
-        rand_ids = random.sample(range(1, count), 30)
-        db = Select.objects.filter(id__in=rand_ids)
+        if count < settings.RANDOM_SELECT:
+            db = Select.objects.all()
+        else:
+            rand_ids = random.sample(range(1, count), settings.RANDOM_SELECT)
+            db = Select.objects.filter(id__in=rand_ids)
         return render(request, "random_select.html", {"data": db})
 
 
@@ -252,8 +258,11 @@ def random_selects(request):
         last = int(time.time())
         request.session["last_time"] = last
         count = Selects.objects.all().count()
-        rand_ids = random.sample(range(1, count), 15)
-        db = Selects.objects.filter(id__in=rand_ids)
+        if count < settings.RANDOM_SELECTS:
+            db = Selects.objects.all()
+        else:
+            rand_ids = random.sample(range(1, count), settings.RANDOM_SELECTS)
+            db = Selects.objects.filter(id__in=rand_ids)
         return render(request, "random_selects.html", {"data": db})
 
 
@@ -317,7 +326,6 @@ def judge(request):
         request.user.userinfo.ftotal += pass_total
         request.user.userinfo.save()
 
-
         response = render(request, "error_pic.html", {
             "count": true_total + pass_total,
             "true_total": true_total,
@@ -345,8 +353,11 @@ def random_judge(request):
         last = int(time.time())
         request.session["last_time"] = last
         count = Judge.objects.all().count()
-        rand_ids = random.sample(range(1, count), 15)
-        db = Judge.objects.filter(id__in=rand_ids)
+        if count < settings.RANDOM_JUDGE:
+            db = Judge.objects.all()
+        else:
+            rand_ids = random.sample(range(1, count), settings.RANDOM_JUDGE)
+            db = Judge.objects.filter(id__in=rand_ids)
         return render(request, "random_judge.html", {"data": db})
 
 
@@ -373,7 +384,7 @@ def create_user(request):
 
     else:
         return redirect("/")
-                            
+
 # def insert(request):
 #     data = pd.read_excel("多选题.xlsx")
 #     for strs, A, B, C, D, result in zip(data["题干"], data["选项A"], data["选项B"], data["选项C"], data["选项D"], data["答案"]):
