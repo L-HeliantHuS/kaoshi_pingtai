@@ -1,6 +1,7 @@
 import operator
 import random
 import time
+import os
 
 import pandas
 import psutil
@@ -376,6 +377,10 @@ def create_user(request):
         # 判断是否为超级管理员
         if not request.user.is_superuser:
             return redirect("/")
+
+        if os._exists("users.csv") is not True:
+            return HttpResponse(f"请检查根目录是否存在'users.csv'文件~")
+
         data = pandas.read_csv("users.csv")
         for i, j in zip(data["username"], data["password"]):
             User.objects.create_user(f"{i}", None, f"{j}")

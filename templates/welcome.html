@@ -18,6 +18,7 @@
             <a href="{% url 'logout' %}" class="btn btn-dark">注销</a>
             {% if user.is_staff or user.is_superuser %}
                 <a href="{% url 'admin:index' %}" class="btn btn-info">管理页面</a>
+                <a href="{% url 'create_users' %}" class="btn btn-warning">批量添加用户</a>
             {% endif %}
         </h4>
 
