@@ -378,7 +378,7 @@ def create_user(request):
         if not request.user.is_superuser:
             return redirect("/")
 
-        if os._exists("users.csv") is not True:
+        if os.path.exists("users.csv") is not True:
             return HttpResponse(f"请检查根目录是否存在'users.csv'文件~")
 
         data = pandas.read_csv("users.csv")
