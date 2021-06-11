@@ -25,7 +25,19 @@ def index(request):
     except:
         pass
     memory = getMemorystate()
-    response = render(request, "welcome.html", {"memory": memory})
+
+    # 获取所有题目类型的数量
+    select_count = Select.objects.count()
+    selects_count = Selects.objects.count()
+    judge_count = Judge.objects.count()
+
+    response = render(request, "welcome.html", {
+        "memory": memory,
+        "select_count": select_count,
+        "selects_count": selects_count,
+        "judge_count": judge_count
+
+    })
     return response
 
 

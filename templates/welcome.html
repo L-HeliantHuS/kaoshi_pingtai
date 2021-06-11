@@ -7,14 +7,19 @@
 
     <div class="container">
         <div class="alert alert-info">
-            <strong>战绩！</strong>你已经累计做了 <strong>{{ user.userinfo.total }}</strong> 道题目, 对 <strong>{{ user.userinfo.ttotal }}</strong> 道, 错 <strong>{{ user.userinfo.ftotal }}</strong> 道, 准确率为 <strong>{% widthratio user.userinfo.ttotal user.userinfo.total 100  %}%</strong> .
+            <strong>战绩！</strong>你已经累计做了 <strong>{{ user.userinfo.total }}</strong> 道题目, 对
+            <strong>{{ user.userinfo.ttotal }}</strong> 道, 错 <strong>{{ user.userinfo.ftotal }}</strong> 道, 准确率为
+            <strong>{% widthratio user.userinfo.ttotal user.userinfo.total 100 %}%</strong> .
         </div>
         <h1 class="text-center">欢迎复习. <label for="" class="text-danger">乾坤未定, 你我皆黑马.</label></h1>
         <br>
 
         <h4 class="text-center">Hello, <strong class="text-info">{{ user }}</strong>.
             你已经累计学习了<strong class="text-warning"> {% widthratio user.userinfo.fraction 60 1 %} </strong> 分钟.
-            累计做题 <strong class="text-warning">{{ user.userinfo.total }}</strong> 道, 对 <strong class="text-warning">{{ user.userinfo.ttotal }}</strong> 道, 错 <strong class="text-warning">{{ user.userinfo.ftotal }}</strong> 道, 准确率为 <strong class="text-warning">{% widthratio user.userinfo.ttotal user.userinfo.total 100  %}%</strong> .
+            累计做题 <strong class="text-warning">{{ user.userinfo.total }}</strong> 道, 对 <strong
+                    class="text-warning">{{ user.userinfo.ttotal }}</strong> 道, 错 <strong
+                    class="text-warning">{{ user.userinfo.ftotal }}</strong> 道, 准确率为 <strong
+                    class="text-warning">{% widthratio user.userinfo.ttotal user.userinfo.total 100 %}%</strong> .
             <a href="{% url 'logout' %}" class="btn btn-dark">注销</a>
             {% if user.is_staff or user.is_superuser %}
                 <a href="{% url 'admin:index' %}" class="btn btn-info">管理页面</a>
@@ -31,13 +36,13 @@
                     </div>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">
-                            <a href="{% url 'select' %}">单选题(140)</a>
+                            <a href="{% url 'select' %}">单选题({{ select_count }})</a>
                         </li>
                         <li class="list-group-item">
-                            <a href="{% url 'selects' %}">多选题(30)</a>
+                            <a href="{% url 'selects' %}">多选题({{ selects_count }})</a>
                         </li>
                         <li class="list-group-item">
-                            <a href="{% url 'judge' %}">判断题(30)</a>
+                            <a href="{% url 'judge' %}">判断题({{ judge_count }})</a>
                         </li>
                     </ul>
                 </div>
@@ -50,13 +55,31 @@
                     </div>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">
-                            <a href="{% url 'random_select' %}">随机单选题(30)</a>
+                            <a href="{% url 'random_select' %}">随机单选题(
+                                {% if select_count > 30 %}
+                                    30
+                                {% elif select_count < 30 %}
+                                    {{ select_count }}
+                                {% endif %}
+                                )</a>
                         </li>
                         <li class="list-group-item">
-                            <a href="{% url 'random_selects' %}">随机多选题(15)</a>
+                            <a href="{% url 'random_selects' %}">随机多选题(
+                                {% if selects_count > 15 %}
+                                    30
+                                {% elif selects_count < 15 %}
+                                    {{ selects_count }}
+                                {% endif %}
+                                )</a>
                         </li>
                         <li class="list-group-item">
-                            <a href="{% url 'random_judge' %}">随机判断题(15)</a>
+                            <a href="{% url 'random_judge' %}">随机判断题(
+                                {% if judge_count > 15 %}
+                                    30
+                                {% elif judge_count < 15 %}
+                                    {{ judge_count }}
+                                {% endif %}
+                                )</a>
                         </li>
                     </ul>
                 </div>
