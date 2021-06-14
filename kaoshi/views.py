@@ -180,8 +180,6 @@ def random_select(request):
             rand_ids = random.sample(range(1, count+1), settings.RANDOM_SELECT)
             db = Select.objects.filter(id__in=rand_ids)
 
-        db = list(db)
-        random.shuffle(db)
         return render(request, "random_select.html", {"data": db})
 
 
@@ -282,8 +280,6 @@ def random_selects(request):
             db = Selects.objects.filter(id__in=rand_ids)
 
 
-        db = list(db)
-        random.shuffle(db)
         return render(request, "random_selects.html", {"data": db})
 
 
@@ -380,8 +376,6 @@ def random_judge(request):
             rand_ids = random.sample(range(1, count), settings.RANDOM_JUDGE)
             db = Judge.objects.filter(id__in=rand_ids)
 
-        db = list(db)
-        random.shuffle(db)
         return render(request, "random_judge.html", {"data": db})
 
 
