@@ -13,9 +13,8 @@
         </div>
         <form action="{% url 'selects' %}" method="post">
             {% csrf_token %}
-        <div class="row">
             {% for i in data %}
-                <div class="col-xl-8 col-lg-12 col-md-12 col-sm-12">
+                
                     <strong>{{ i.id }}.</strong> {{ i.topic }} <br>
                     <table>
                     <tr>
@@ -46,9 +45,7 @@
                     </tr>
                 </table> &nbsp;
                     <hr>
-                </div>
             {% endfor %}
-        </div>
             <div style="position: fixed; margin-right: 10px; bottom: 0; right: 0; float: right;">
                 <a href="{% url 'index' %}" class="btn btn-info">返回主页</a>
                 <input type="submit" value="提交" class="btn btn-success">
