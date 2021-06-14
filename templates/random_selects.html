@@ -14,10 +14,34 @@
             {% csrf_token %}
             {% for i in data %}
                 <strong>{{ forloop.counter }}.</strong> {{ i.topic }} <br>
-                <label for=""><input type="checkbox" name="select" value="{{ i.id }}|A|{{ forloop.counter }}">{{ i.a }}</label> &nbsp;
-                <label for=""><input type="checkbox" name="select" value="{{ i.id }}|B|{{ forloop.counter }}">{{ i.b }}</label> <br>
-                <label for=""><input type="checkbox" name="select" value="{{ i.id }}|C|{{ forloop.counter }}">{{ i.c }}</label> &nbsp;
-                <label for=""><input type="checkbox" name="select" value="{{ i.id }}|D|{{ forloop.counter }}">{{ i.d }}</label> &nbsp;
+                <table>
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="select" value="{{ i.id }}|A|{{ forloop.counter }}"
+                                   id="{{ i.id }}|A|{{ forloop.counter }}"><label
+                                for="{{ i.id }}|A|{{ forloop.counter }}">{{ i.a }}</label> &nbsp;
+                        </td>
+                        <td>
+                            <input type="checkbox" name="select" value="{{ i.id }}|B|{{ forloop.counter }}"
+                                   id="{{ i.id }}|B|{{ forloop.counter }}"><label
+                                for="{{ i.id }}|B|{{ forloop.counter }}">{{ i.b }}</label>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="select" value="{{ i.id }}|C|{{ forloop.counter }}"
+                                   id="{{ i.id }}|C|{{ forloop.counter }}"><label
+                                for="{{ i.id }}|C|{{ forloop.counter }}">{{ i.c }}</label>
+                        </td>
+
+                        <td>
+                            <input type="checkbox" name="select" value="{{ i.id }}|D|{{ forloop.counter }}"
+                                   id="{{ i.id }}|D|{{ forloop.counter }}"><label
+                                for="{{ i.id }}|D|{{ forloop.counter }}">{{ i.d }}</label> &nbsp;
+                        </td>
+                    </tr>
+                </table>
                 <hr>
             {% endfor %}
             <div style="position: fixed; margin-right: 10px; bottom: 0; right: 0; float: right;">

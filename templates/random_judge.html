@@ -14,8 +14,8 @@
             {% csrf_token %}
             {% for i in data %}
                 <strong>{{ forloop.counter }}.</strong> {{ i.topic }} <br>
-                <label for=""><input type="checkbox" name="judge" value="{{ i.id }}|1|{{ forloop.counter }}">对</label> &nbsp;
-                <label for=""><input type="checkbox" name="judge" value="{{ i.id }}|0|{{ forloop.counter }}">错</label> <br>
+                <label for="{{ i.id }}|1|{{ forloop.counter }}"><input type="checkbox" name="judge" value="{{ i.id }}|1|{{ forloop.counter }}" id="{{ i.id }}|1|{{ forloop.counter }}">对</label> &nbsp;
+                <label for="{{ i.id }}|0|{{ forloop.counter }}"><input type="checkbox" name="judge" value="{{ i.id }}|0|{{ forloop.counter }}" id="{{ i.id }}|0|{{ forloop.counter }}">错</label> <br>
                 <hr>
             {% endfor %}
             <div style="position: fixed; margin-right: 10px; bottom: 0; right: 0; float: right;">

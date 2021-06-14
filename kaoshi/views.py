@@ -402,16 +402,20 @@ def create_user(request):
     else:
         return redirect("/")
 
-# def insert(request):
-#     data = pd.read_excel("多选题.xlsx")
-#     for strs, A, B, C, D, result in zip(data["题干"], data["选项A"], data["选项B"], data["选项C"], data["选项D"], data["答案"]):
-#         db = Selects()
-#         db.id = db.objects.count() + 1
-#         db.topic = strs
-#         db.a = A
-#         db.b = B
-#         db.c = C
-#         db.d = D
-#         db.key = result
-#         db.save()
-#     return HttpResponse("success")
+def insert(request):
+    #
+    # right = "C; A; A; C; B; D; A; A; B; A; D; A; A; C; C; A; C; A; D; A; D; B; B; B; A; B; B; A; D; C; B; C; B; D; C; C; B; A; D; A; A; A; A; A; A; A; A; C; B; C; C; B; C; C; A; C; A; A; A; C; B; A; C; A; C; B; C; C; D; B; C; B; B; B; C; A; B; A; D; A; B; C; A; D; D; A; D; B; A; B; D; B; C; C; D; A; A; A; B; A"
+    # right = right.split("; ")
+    #
+    #
+    # for key, i in zip(right, range(21, 121)):
+    #     print(key, i)
+    #     db = Select.objects.get(id=str(i))
+    #     db.key = key
+    #     db.save()
+
+    return HttpResponse("success")
+
+
+
+
