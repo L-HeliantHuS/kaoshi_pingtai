@@ -173,11 +173,15 @@ def random_select(request):
         last = int(time.time())
         request.session["last_time"] = last
         count = Select.objects.all().count()
+
         if count < settings.RANDOM_SELECT:
             db = Select.objects.all()
         else:
-            rand_ids = random.sample(range(1, count), settings.RANDOM_SELECT)
+            rand_ids = random.sample(range(1, count+1), settings.RANDOM_SELECT)
             db = Select.objects.filter(id__in=rand_ids)
+
+        db = list(db)
+        random.shuffle(db)
         return render(request, "random_select.html", {"data": db})
 
 
@@ -274,8 +278,12 @@ def random_selects(request):
         if count < settings.RANDOM_SELECTS:
             db = Selects.objects.all()
         else:
-            rand_ids = random.sample(range(1, count), settings.RANDOM_SELECTS)
+            rand_ids = random.sample(range(1, count+1), settings.RANDOM_SELECTS)
             db = Selects.objects.filter(id__in=rand_ids)
+
+
+        db = list(db)
+        random.shuffle(db)
         return render(request, "random_selects.html", {"data": db})
 
 
@@ -371,6 +379,9 @@ def random_judge(request):
         else:
             rand_ids = random.sample(range(1, count), settings.RANDOM_JUDGE)
             db = Judge.objects.filter(id__in=rand_ids)
+
+        db = list(db)
+        random.shuffle(db)
         return render(request, "random_judge.html", {"data": db})
 
 
