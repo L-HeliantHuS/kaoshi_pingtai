@@ -130,8 +130,14 @@ def select(request):
                 pass_key.append(key)
                 pass_index.append(int(indexkey))  # 错误的索引
 
-        error_topic = db.filter(id__in=pass_key)
+        error_topic = [db.get(id=i) for i in pass_key]
+        # error_topic = db.filter(id__in=pass_key)
+
+
+
         pass_index.sort(reverse=True)
+
+        print(pass_key, pass_value)
 
         # 提交题目, 获取当前的时间戳，并获取之前看到题目的时间戳, 进行减法运算, 得到时间.
         end_time = int(time.time())
@@ -179,7 +185,8 @@ def random_select(request):
         else:
             rand_ids = random.sample(range(1, count+1), settings.RANDOM_SELECT)
             db = Select.objects.filter(id__in=rand_ids)
-
+        db = list(db)
+        random.shuffle(db)
         return render(request, "random_select.html", {"data": db})
 
 
@@ -233,7 +240,8 @@ def selects(request):
         int_temp_index = [int(i) for i in pass_index]
         int_temp_index.sort(reverse=True)
 
-        error_topic = db.filter(id__in=pass_key)
+        error_topic = [db.get(id=i) for i in pass_key]
+        # error_topic = db.filter(id__in=pass_key)
 
         end_time = int(time.time())
         train_time = end_time - request.session["last_time"]
@@ -279,7 +287,8 @@ def random_selects(request):
             rand_ids = random.sample(range(1, count+1), settings.RANDOM_SELECTS)
             db = Selects.objects.filter(id__in=rand_ids)
 
-
+        db = list(db)
+        random.shuffle(db)
         return render(request, "random_selects.html", {"data": db})
 
 
@@ -325,7 +334,8 @@ def judge(request):
                 pass_value.insert(0, replace_temp[value])
                 pass_index.append(indexkey)
 
-        error_topic = db.filter(id__in=pass_key)
+        error_topic = [db.get(id=i) for i in pass_key]
+        # error_topic = db.filter(id__in=pass_key)
 
         pass_index.sort(reverse=True)
 
@@ -376,6 +386,8 @@ def random_judge(request):
             rand_ids = random.sample(range(1, count), settings.RANDOM_JUDGE)
             db = Judge.objects.filter(id__in=rand_ids)
 
+        db = list(db)
+        random.shuffle(db)
         return render(request, "random_judge.html", {"data": db})
 
 
