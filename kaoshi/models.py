@@ -3,9 +3,7 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 class Select(models.Model):
-
-
-    id = models.IntegerField(primary_key=True, verbose_name="题号")
+    id = models.AutoField(primary_key=True,  verbose_name="题号")
     topic = models.TextField(verbose_name="题目")
     a = models.CharField(max_length=255, name="a", verbose_name="A选项")
     b = models.CharField(max_length=255, name="b", verbose_name="B选项")
@@ -20,7 +18,7 @@ class Select(models.Model):
 class Selects(models.Model):
 
 
-    id = models.IntegerField(primary_key=True, verbose_name="题号")
+    id = models.AutoField(primary_key=True, verbose_name="题号")
     topic = models.TextField(verbose_name="题目")
     a = models.CharField(max_length=255, name="a", verbose_name="A选项")
     b = models.CharField(max_length=255, name="b", verbose_name="B选项")
@@ -35,7 +33,7 @@ class Selects(models.Model):
 class Judge(models.Model):
 
 
-    id = models.IntegerField(primary_key=True, verbose_name="题号")
+    id = models.AutoField(primary_key=True, verbose_name="题号")
     topic = models.TextField(verbose_name="题目")
     key = models.BooleanField(verbose_name="答案")
 
@@ -46,7 +44,7 @@ class Judge(models.Model):
 class Bugs(models.Model):
 
 
-    id = models.IntegerField(auto_created=True, primary_key=True, verbose_name="序号", unique=True)
+    id = models.AutoField(auto_created=True, primary_key=True, verbose_name="序号", unique=True)
     title = models.CharField(max_length=255, verbose_name="标题")
     date = models.DateTimeField(auto_now_add=True, verbose_name="日期")
     content = models.TextField(verbose_name="内容")
