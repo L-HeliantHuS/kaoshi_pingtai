@@ -14,8 +14,6 @@ from django.shortcuts import render, HttpResponse, redirect
 from kaoshi.models import Select, Selects, Judge, Bugs, UserInfo
 
 
-# Create your views here.
-
 @login_required(login_url="login")
 def index(request):
     # 第一次进入会初始化一个分数.
@@ -420,16 +418,7 @@ def create_user(request):
         return redirect("/")
 
 def insert(request):
-    #
-    # right = "C; A; A; C; B; D; A; A; B; A; D; A; A; C; C; A; C; A; D; A; D; B; B; B; A; B; B; A; D; C; B; C; B; D; C; C; B; A; D; A; A; A; A; A; A; A; A; C; B; C; C; B; C; C; A; C; A; A; A; C; B; A; C; A; C; B; C; C; D; B; C; B; B; B; C; A; B; A; D; A; B; C; A; D; D; A; D; B; A; B; D; B; C; C; D; A; A; A; B; A"
-    # right = right.split("; ")
-    #
-    #
-    # for key, i in zip(right, range(21, 121)):
-    #     print(key, i)
-    #     db = Select.objects.get(id=str(i))
-    #     db.key = key
-    #     db.save()
+
 
     return HttpResponse("success")
 
