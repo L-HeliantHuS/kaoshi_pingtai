@@ -56,8 +56,8 @@
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">
                             <a href="{% url 'random_select' %}">随机单选题(
-                                {% if select_count > 30 %}
-                                    30
+                                {% if select_count > system_select_count %}
+                                    {{ system_select_count }}
                                 {% elif select_count < 30 %}
                                     {{ select_count }}
                                 {% endif %}
@@ -65,8 +65,8 @@
                         </li>
                         <li class="list-group-item">
                             <a href="{% url 'random_selects' %}">随机多选题(
-                                {% if selects_count > 15 %}
-                                    30
+                                {% if selects_count > system_selects_count %}
+                                    {{ system_selects_count }}
                                 {% elif selects_count < 15 %}
                                     {{ selects_count }}
                                 {% endif %}
@@ -74,8 +74,8 @@
                         </li>
                         <li class="list-group-item">
                             <a href="{% url 'random_judge' %}">随机判断题(
-                                {% if judge_count > 15 %}
-                                    30
+                                {% if judge_count > system_judge_count %}
+                                    {{ system_judge_count }}
                                 {% elif judge_count < 15 %}
                                     {{ judge_count }}
                                 {% endif %}

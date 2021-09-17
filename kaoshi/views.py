@@ -33,8 +33,10 @@ def index(request):
         "memory": memory,
         "select_count": select_count,
         "selects_count": selects_count,
-        "judge_count": judge_count
-
+        "judge_count": judge_count,
+        "system_select_count": settings.RANDOM_SELECT,
+        "system_selects_count": settings.RANDOM_SELECTS,
+        "system_judge_count": settings.RANDOM_JUDGE
     })
     return response
 
