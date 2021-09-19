@@ -1,2 +1,2 @@
 import os
-os.system("python manage.py runserver 80 --insecure")
+os.system("python manage.py runserver 0.0.0.0:80 --insecure")
